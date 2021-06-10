@@ -94,13 +94,15 @@ export default function SnackbarElement({
   const [actionMeasureWidth, setActionMeasureWidth] = React.useState(0);
   React.useEffect(() => {
     if (__BROWSER__) {
-      const observer = new window.ResizeObserver(([entry]) =>
-        setActionMeasureWidth(entry.contentRect.width),
-      );
-      if (actionMeasureRef.current) {
-        observer.observe(actionMeasureRef.current);
+      if (window.ResizeObserver) {
+        const observer = new window.ResizeObserver(([entry]) =>
+          setActionMeasureWidth(entry.contentRect.width),
+        );
+        if (actionMeasureRef.current) {
+          observer.observe(actionMeasureRef.current);
+        }
+        return () => observer.disconnect();
       }
-      return () => observer.disconnect();
     }
   }, [actionMeasureRef.current]);
 
